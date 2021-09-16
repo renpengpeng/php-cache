@@ -1,0 +1,25 @@
+{
+    "name": "renpengpeng/php-cache",
+    "description": "PHP Cache Extension",
+    "keywords": [
+        "PHP",
+        "Cache",
+        "Extension",
+        "Redis",
+        "Memcached"
+    ],
+    "homepage": "http://renpengpeng.com",
+    "license": "Apache-2.0",
+    "authors": [{
+        "name": "Renpengpeng",
+        "email": "2280120391@qq.com"
+    }],
+    "require": {
+        "php": ">=5.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "renpengpeng\\": "src/"
+        }
+    }
+}
