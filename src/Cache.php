@@ -5,7 +5,7 @@ namespace renpengpeng;
 use renpengpeng\cache\Driver;
 
 // 屏蔽错误
-error_reporting(0);
+error_reporting(E_ALL | E_STRICT);
 
 class Cache {
 	/**
@@ -13,19 +13,19 @@ class Cache {
 	 * @var Array
 	 */
 	static $options 	=	[
-		// 缓存使用驱动，可选 ： File(文件) / Redis / Memcached
 		'type'		=>	'File',
-		// 缓存前缀
 		'prefix'	=>	'cache_',
-		// 默认缓存时间： 0 = 永久，单位：s
 		'expire'	=>	0,
-		// File 缓存配置
 		'file'		=>	[
 			'cache_dir'	=>	null,
 		],
-		// Redis 缓存配置
 		'redis'		=>	[
-
+			'host'		=>	'127.0.0.1',
+			'port'		=>	'6379',
+			'password'	=>	'',
+			'select'	=>	'',
+			'timeout'	=>	'',
+			'pconnect'	=>	false
 		],
 	];
 
@@ -38,25 +38,29 @@ class Cache {
 	/**
 	 * 连接当前的一个实例 && 并且返回
 	 * @param  array   $options 配置
-	 * @param  boolean $name   起个名
+	 * @param  string  $name   起个名
+	 * @param  boolean $forceInstance   如果为true则不缓存实例
 	 * @return Driver
 	 */
-	public static function connect(array $options=[],string $name=''){
-		// 默认 File 类型
-		$options['type'] 	=	isset($options['type']) ? ucwords($options['type']) : 'File';
-		self::$options 		=	array_merge(self::$options,$options);
-
-		if($options['type'] == 'File' && empty(self::$options['file']['cache_dir'])){
+	public static function connect(array $options=[],$forceInstance=false){
+		if(count($options)){
+			// 默认 File 类型
+			$options['type'] 	=	isset($options['type']) ? ucwords($options['type']) : 'File';
+			self::$options 		=	array_merge(self::$options,$options);
+		}
+		
+		if(self::$options['type'] == 'File' && empty(self::$options['file']['cache_dir'])){
 			return null;
 		}
-		if(empty($name)){
-			$name 	=	md5(serialize(self::$options));
+		$cacheName 	=	md5(serialize(self::$options));
+		$class 		=	'renpengpeng\\cache\driver\\'.self::$options['type'];
+		if($forceInstance){
+			return new $class(self::$options);
 		}
-		if(!isset(self::$instance[$name])){
-			$class 		=	'renpengpeng\\cache\driver\\'.self::$options['type'];
-			self::$instance[$name] 	=	new $class(self::$options);
+		if(!isset(self::$instance[$cacheName])){
+			self::$instance[$cacheName] 	=	new $class(self::$options);
 		}
-		return self::$instance[$name];
+		return self::$instance[$cacheName];
 	}
 
 	/**
@@ -66,7 +70,7 @@ class Cache {
 	 * @param int 	  $expire 设置时间,不设置的话默认使用全局配置
 	 */
 	public static function set($key,$value,$expire=null){
-		return self::connect()->set($key,$value,($expire === null) ? self::$options['expire'] : $expire);
+		return self::connect()->set(self::$options['prefix'].$key,$value,($expire === null) ? self::$options['expire'] : $expire);
 	}
 
 	/**
@@ -76,7 +80,7 @@ class Cache {
 	 * @return CacheResult
 	 */
 	public static function get($key,$default=null){
-		return self::connect()->get($key,$default);
+		return self::connect()->get(self::$options['prefix'].$key,$default);
 	}
 
 	/**
@@ -85,7 +89,7 @@ class Cache {
 	 * @return boolean 
 	 */
 	public static function has($key){
-		return self::connect()->has($key);
+		return self::connect()->has(self::$options['prefix'].$key);
 	}
 
 	/**
@@ -95,7 +99,7 @@ class Cache {
 	 * @return Boolean
 	 */
 	public static function delay($key,$expire=0){
-		return self::connect()->delay($key,$expire);
+		return self::connect()->delay(self::$options['prefix'].$key,$expire);
 	}
 
 	/**
@@ -105,7 +109,7 @@ class Cache {
 	 * @return Boolean
 	 */
 	public static function increment($key,$step=1){
-		return self::connect()->increment($key,$step);
+		return self::connect()->increment(self::$options['prefix'].$key,$step);
 	}
 
 	/**
@@ -115,7 +119,7 @@ class Cache {
 	 * @return Boolean
 	 */
 	public static function reduction($key,$step=1){
-		return self::connect()->reduction($key,$step);
+		return self::connect()->reduction(self::$options['prefix'].$key,$step);
 	}
 
 	/**
@@ -124,7 +128,7 @@ class Cache {
 	 * @return Boolean
 	 */
 	public static function delete($key){
-		return self::connect()->delete($key);
+		return self::connect()->delete(self::$options['prefix'].$key);
 	}
 
 	/**
@@ -134,4 +138,5 @@ class Cache {
 	public static function clear(){
 		return self::connect()->clear();
 	}
+
 }
