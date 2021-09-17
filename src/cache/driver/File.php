@@ -33,7 +33,7 @@ class File extends Driver {
 	 * @return none
 	 */
 	public function get($key,$default=null){
-		$read 	=	$this->readCacheFile($key);
+		$read 	=	$this->readCache($key);
 		if( $read == false){
 			return $default;
 		}
@@ -56,7 +56,7 @@ class File extends Driver {
 	 * @return Boolean
 	 */
 	public function delay($key,$expire=0){
-		$read 	=	$this->readCacheFile($key);
+		$read 	=	$this->readCache($key);
 		if( $read  == false){
 			return false;
 		}
@@ -64,12 +64,12 @@ class File extends Driver {
 		if($expire == 0){
 			return $this->set($key,$read['value'],$expire);
 		}
-		$stop_time 	= 	(($read['stop_time'] == 0) ? time() : $read['stop_time']) + $expire;
-		if(time() > $stop_time){
+		$stopTime 	= 	(($read['stop_time'] == 0) ? time() : $read['stop_time']) + $expire;
+		if(time() > $stopTime){
 			// 设置过期
 			return $this->delete($key);
 		}
-		$expire 	=	$stop_time - time();
+		$expire 	=	$stopTime - time();
 		return $this->set($key,$read['value'],$expire);
 	}
 
@@ -80,12 +80,12 @@ class File extends Driver {
 	 * @return Boolean
 	 */
 	public function increment($key,$step=1){
-		$read 	=	$this->readCacheFile($key);
+		$read 	=	$this->readCache($key);
 		if( $read == false ){
 			return false;
 		}
 		// 重新写入
-		return $this->set($key,(int)$read['value']+$step, $read['stop_time'] - time());
+		return $this->set($key,(int)$read['value']+$step, $read['stop_time'] == 0 ? null : $read['stop_time'] - time());
 	}
 
 	/**
@@ -146,7 +146,7 @@ class File extends Driver {
 	 * @return String
 	 */
 	protected function positionCacheFile($key){
-		return $this->options['file']['cache_dir'].DIRECTORY_SEPARATOR.md5($this->options['prefix'].$key);
+		return $this->options['file']['cache_dir'].DIRECTORY_SEPARATOR.md5($key);
 	}
 
 	/**
@@ -154,7 +154,7 @@ class File extends Driver {
 	 * @param  String   $key 键
 	 * @return Cache
 	 */
-	protected function readCacheFile($key){
+	protected function readCache($key){
 		$cacheFile 	=	$this->positionCacheFile($key);
 		if( !is_file($cacheFile) || !$read = file_get_contents($cacheFile) ){
 			return false;
