@@ -13,15 +13,14 @@ class Redis extends Driver {
 
 	/**
 	 * Redis Handle
-	 * @var Redis
+	 * @var Object
 	 */
 	private $handle;
 
 	public function __construct($options){
 		$this->options 	=	$options;
 		if(extension_loaded('redis') == false){
-			throw new Exception("Redis not ready!", 1);
-			return false;
+			throw new \Exception("Redis not ready!", 1);
 		}
 		$this->handle 	=	new \Redis();
 		if($this->options['redis']['pconnect']){
