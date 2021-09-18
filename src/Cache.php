@@ -24,7 +24,7 @@ class Cache {
 			'port'		=>	'6379',
 			'password'	=>	'',
 			'select'	=>	'',
-			'timeout'	=>	'',
+			'timeout'	=>	0,
 			'pconnect'	=>	false
 		],
 	];

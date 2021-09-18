@@ -25,9 +25,9 @@ class Redis extends Driver {
 		}
 		$this->handle 	=	new \Redis();
 		if($this->options['redis']['pconnect']){
-			$this->handle->pconnect($this->options['redis']['host'],$this->options['redis']['port']);
+			$this->handle->pconnect($this->options['redis']['host'],$this->options['redis']['port'],$this->options['redis']['timeout']);
 		}else{
-			$this->handle->connect($this->options['redis']['host'],$this->options['redis']['port']);
+			$this->handle->connect($this->options['redis']['host'],$this->options['redis']['port'],$this->options['redis']['timeout']);
 		}
 		if($this->options['redis']['password']){
 			$this->handle->auth($this->options['redis']['password']);
