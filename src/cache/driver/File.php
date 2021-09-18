@@ -85,7 +85,7 @@ class File extends Driver {
 			return false;
 		}
 		// 重新写入
-		return $this->set($key,(int)$read['value']+$step, $read['stop_time'] == 0 ? null : $read['stop_time'] - time());
+		return $this->set($key,(float)$read['value']+$step, $read['stop_time'] == 0 ? null : $read['stop_time'] - time());
 	}
 
 	/**
