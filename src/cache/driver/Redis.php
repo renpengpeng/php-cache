@@ -44,7 +44,7 @@ class Redis extends Driver {
 	 * @param Int|null $expire 有效期
 	 */
 	public function set($key,$value,$expire=null){
-		$value 		=	$this->creationCacheValue($key,$value,$expire,$this->options);
+		$value 		=	is_scalar($value) ?: serialize($value);
 		if($expire){
 			$set 	=	$this->handle->setex($key,$expire,$value);
 		}else{
@@ -60,7 +60,11 @@ class Redis extends Driver {
 	 * @return none
 	 */
 	public function get($key,$default=null){
-		return $this->readCache($key) ? $this->readCache($key)['value'] : $default;
+		$value 	=	$this->handle->get($key);
+		if($value === false){
+			return $default;
+		}
+		return @unserialize($value) ?: ($value ? $value : $default);
 	}
 
 	/**
@@ -79,18 +83,15 @@ class Redis extends Driver {
 	 * @return Boolean
 	 */
 	public function delay($key,$expire=0){
-		$read 	=	$this->readCache($key);
-		if($read == false){
+		$get 	=	$this->get($key);
+		if(!$get){
 			return false;
 		}
-		if($expire == 0){
-			return $this->set($key,$read['value']);
+		$ttl 	=	$this->handle->ttl($key);
+		if($expire != 0){
+			$expire 	=	($ttl == '-1' ? 0 : $ttl) + $expire;
 		}
-		$stopTime 	=	( $read['stop_time'] == 0 ) ? time() + $expire : $read['stop_time'] + $expire;
-		if($stopTime <  time()){
-			return $this->delete($key);
-		}
-		return $this->set($key,$read['value'],$stopTime - time());
+		return $this->set($key,$get,$expire);
 	}
 
 	/**
@@ -100,11 +101,7 @@ class Redis extends Driver {
 	 * @return Boolean
 	 */
 	public function increment($key,$step=1){
-		$read 	=	$this->readCache($key);
-		if($read == false){
-			return false;
-		}
-		return $this->set($key,(float)$read['value'] + $step,$read['stop_time'] == 0 ? null : $read['stop_time'] - time());
+		return $this->handle->incrby($key,$step);
 	}
 
 	/**
@@ -114,7 +111,7 @@ class Redis extends Driver {
 	 * @return Boolean
 	 */
 	public function reduction($key,$step=1){
-		return $this->increment($key, 0 - $setp);
+		return $this->handle->decrby($key, $step);
 	}
 
 	/**
@@ -132,18 +129,5 @@ class Redis extends Driver {
 	 */
 	public function clear(){
 		return $this->handle->flushDB();
-	}
-
-	/**
-	 * 读取缓存
-	 * @param  String $key 读取的Key
-	 * @return Boolean || Array
-	 */
-	protected function readCache($key){
-		$read 	=	$this->handle->get($key);
-		if(!$read || ! $read = unserialize(gzinflate($read))){
-			return false;
-		}
-		return $read;
 	}
 }
