@@ -69,8 +69,8 @@ class Cache {
 	 * @param Any  	  $value  设置的值
 	 * @param int 	  $expire 设置时间,不设置的话默认使用全局配置
 	 */
-	public static function set($key,$value,$expire=null){
-		return self::connect()->set(self::$options['prefix'].$key,$value,($expire === null) ? self::$options['expire'] : $expire);
+	public static function set($key,$value,$expire=0){
+		return self::connect()->set(self::$options['prefix'].$key,$value,$expire);
 	}
 
 	/**

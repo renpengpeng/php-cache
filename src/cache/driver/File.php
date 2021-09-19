@@ -20,7 +20,7 @@ class File extends Driver {
 	 * @param Any $value  		值
 	 * @param Int|null $expire 有效期
 	 */
-	public function set($key,$value,$expire=null){
+	public function set($key,$value,$expire=0){
 		$cacheFile 	=	$this->positionCacheFile($key);
 		$data 		=	$this->creationCacheValue($key,$value,$expire,$this->options);
 		return file_put_contents($cacheFile,$data) ? true : false;
