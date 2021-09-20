@@ -38,18 +38,7 @@ class Cache {
 			'port'		=>	11211,
 			'timeout'	=>	1,
 			'pconnect'	=>	false
-		],
-		/**
-		 * Memcached 服务器配置
-		 */
-		'memcached'	=>	[
-			'host'		=>	'127.0.0.1',
-			'port'		=>	11211,
-			'username'	=>	'',
-			'password'	=>	'',
-			'timeout'	=>	0,
-			'options'	=>	[]
-		],
+		]
 	];
 
 	/**
