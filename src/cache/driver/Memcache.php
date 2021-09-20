@@ -136,7 +136,7 @@ class Memcache extends Driver {
 	 * @param  String $key 读取的key
 	 * @return Any
 	 */
-	public function readCache($key){
+	protected function readCache($key){
 		$get 	=	$this->handle->get($key);
 		if(!$get){
 			return false;
