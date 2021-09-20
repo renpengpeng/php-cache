@@ -19,13 +19,36 @@ class Cache {
 		'file'		=>	[
 			'cache_dir'	=>	null,
 		],
+		/**
+		 * Redis 服务器配置
+		 */
 		'redis'		=>	[
 			'host'		=>	'127.0.0.1',
-			'port'		=>	'6379',
+			'port'		=>	6379,
 			'password'	=>	'',
 			'select'	=>	'',
 			'timeout'	=>	0,
 			'pconnect'	=>	false
+		],
+		/**
+		 * Memcache 服务器配置
+		 */
+		'memcache'	=>	[
+			'host'		=>	'127.0.0.1',
+			'port'		=>	11211,
+			'timeout'	=>	1,
+			'pconnect'	=>	false
+		],
+		/**
+		 * Memcached 服务器配置
+		 */
+		'memcached'	=>	[
+			'host'		=>	'127.0.0.1',
+			'port'		=>	11211,
+			'username'	=>	'',
+			'password'	=>	'',
+			'timeout'	=>	0,
+			'options'	=>	[]
 		],
 	];
 
