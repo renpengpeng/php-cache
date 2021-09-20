@@ -62,6 +62,7 @@ class Cache {
 		}
 		
 		if(self::$options['type'] == 'File' && empty(self::$options['file']['cache_dir'])){
+			throw new \Exception("cache_dir not found", 1);
 			return null;
 		}
 		$cacheName 	=	md5(serialize(self::$options));
