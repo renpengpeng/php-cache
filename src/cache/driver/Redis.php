@@ -44,7 +44,7 @@ class Redis extends Driver {
 	 * @param Int|null $expire 有效期
 	 */
 	public function set($key,$value,$expire=0){
-		$value 		=	is_scalar($value) ?: serialize($value);
+		$value 		=	is_scalar($value) ? $value : serialize($value);
 		if($expire){
 			$set 	=	$this->handle->setex($key,$expire,$value);
 		}else{
