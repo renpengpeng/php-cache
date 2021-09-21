@@ -31,7 +31,12 @@ class Apcu extends Driver {
 			'start_time'	=>	time(),
 			'stop_time'		=>	$expire ? time() + $expire : 0
 		]);
-		return apcu_add($key,$value,$expire);
+		if($this->has($key)){
+			$set 	=	apcu_store($key,$value,$expire);
+		}else{
+			$set 	=	apcu_store($key,$value,$expire);
+		}
+		return $set;
 	}
 
 	/**
