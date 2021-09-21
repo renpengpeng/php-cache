@@ -92,7 +92,7 @@ class Apcu extends Driver {
 		if($read == false){
 			return false;
 		}
-		return $this->set($key,(float)$read['value'] + $step,$read['stop_time'] == 0 ? 0 : $read['stop_time'] - time());
+		return $this->set($key,$this->sum($read['value'] , $step),$read['stop_time'] == 0 ? 0 : $read['stop_time'] - time());
 	}
 
 	/**

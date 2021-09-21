@@ -101,7 +101,14 @@ class Redis extends Driver {
 	 * @return Boolean
 	 */
 	public function increment($key,$step=1){
-		return $this->handle->incrby($key,$step);
+		$get 	=	$this->get($key);
+		if(!$get){
+			return false;
+		}
+		$ttl 	=	$this->handle->ttl($key);
+		$ttl 	=	($ttl == '-1') ? 0 : $ttl;
+
+		return $this->set($key, $this->sum($get,$step) , $ttl );
 	}
 
 	/**
@@ -111,7 +118,7 @@ class Redis extends Driver {
 	 * @return Boolean
 	 */
 	public function reduction($key,$step=1){
-		return $this->handle->decrby($key, $step);
+		return $this->increment($key,0-$step);
 	}
 
 	/**
