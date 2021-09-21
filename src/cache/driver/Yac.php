@@ -39,7 +39,12 @@ class Yac extends Driver {
 			'start_time'	=>	time(),
 			'stop_time'		=>	$expire ? time() + $expire : 0
 		]);
-		return $this->handle->add($key,$value,$expire);
+		if($this->has($key)){
+			$set 	=	$this->handle->set($key,$value,$expire);
+		}else{
+			$set 	=	$this->handle->add($key,$value,$expire);
+		}
+		return $set;
 	}
 
 	/**
