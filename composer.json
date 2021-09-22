@@ -1,12 +1,14 @@
 {
     "name": "renpengpeng/php-cache",
-    "description": "PHP Cache Extension",
+    "description": "Make caching easier",
     "keywords": [
         "PHP",
         "Cache",
         "Extension",
         "Redis",
-        "Memcached"
+        "Memcache",
+        "Apcu",
+        "Yac"
     ],
     "homepage": "http://renpengpeng.com",
     "license": "Apache-2.0",
@@ -19,7 +21,7 @@
     },
     "autoload": {
         "psr-4": {
-            "renpengpeng\\": "src/"
+            "renpengpeng\\": "src"
         }
     }
 }
