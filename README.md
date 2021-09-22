@@ -5,7 +5,7 @@
 php-cache 封装了Redis，Memcache，Yac，Apcu缓存方式，让PHP缓存更便捷。
 
 ### 安装
-`composer install renpengpeng/php-cache:*`
+`composer require renpengpeng/php-cache`
 
 ### 示例操作
 
