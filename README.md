@@ -1,13 +1,15 @@
 ## PHP-Cache
 
-### 简介
+### Introduce
 
-php-cache 封装了Redis，Memcache，Yac，Apcu缓存方式，让PHP缓存更便捷。
+Php-cache encapsulates Redis, Memcache, Yac, and Apcu cache modes to make PHP cache more convenient.
 
-### 安装
+[READEME.md Chinese](READEME.md)
+
+### Install
 `composer require renpengpeng/php-cache`
 
-### 示例操作
+### Example
 
 ```php
 <?php
@@ -44,5 +46,5 @@ Cache::delete('version');
 Cache::clear();
 ```
 
-### 使用手册
+### Manual
 语雀：https://www.yuque.com/ha-renpengpeng/php-cache
