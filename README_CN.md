@@ -4,7 +4,7 @@
 
 php-cache 封装了Redis，Memcache，Yac，Apcu缓存方式，让PHP缓存更便捷。
 
-[READEME.md英文版](READEME.md)
+[READEME.md 英文版](README.md)
 
 ### 安装
 

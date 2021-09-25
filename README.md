@@ -4,7 +4,7 @@
 
 Php-cache encapsulates Redis, Memcache, Yac, and Apcu cache modes to make PHP cache more convenient.
 
-[READEME.md Chinese](READEME.md)
+[READEME.md Chinese](README_CN.md)
 
 ### Install
 `composer require renpengpeng/php-cache`
@@ -24,27 +24,27 @@ Cache::connect([
 	]
 ],true);
 
-// 设置缓存 60秒
+// Set the cache 60 seconds
 Cache::set('version','1.0.0',60);
 
-// 获取缓存
+// Get the cache
 Cache::get('version','1.0.0');
 
-// 自增
+// Since the increase
 Cache::increment('version');
 
-// 自减
+// Since the reduction of
 Cache::reduction('version');
 
-// 延时为永久
+// Delay is permanent
 Cache::delay('version');
 
-// 删除缓存
+// Delete the cache
 Cache::delete('version');
 
-// 清空缓存
+// Clear the cache
 Cache::clear();
 ```
 
 ### Manual
-语雀：https://www.yuque.com/ha-renpengpeng/php-cache
+Yuque：https://www.yuque.com/ha-renpengpeng/php-cache
